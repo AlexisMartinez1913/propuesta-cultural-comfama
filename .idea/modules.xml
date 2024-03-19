@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/propuesta-cultural.iml" filepath="$PROJECT_DIR$/.idea/propuesta-cultural.iml" />
+      <module fileurl="file://$PROJECT_DIR$/propuesta-cultural/propuesta-cultural.iml" filepath="$PROJECT_DIR$/propuesta-cultural/propuesta-cultural.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/propuesta-cultural-comfama.iml" filepath="$PROJECT_DIR$/.idea/propuesta-cultural-comfama.iml" />
     </modules>
   </component>
 </project>

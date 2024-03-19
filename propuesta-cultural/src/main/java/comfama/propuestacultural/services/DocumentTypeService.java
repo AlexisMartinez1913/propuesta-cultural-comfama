@@ -1,71 +1,69 @@
 package comfama.propuestacultural.services;
 
 import comfama.propuestacultural.dtos.DocumentTypeDTO;
-import comfama.propuestacultural.maps.IDocumentTypeMap;
 import comfama.propuestacultural.models.DocumentType;
 import comfama.propuestacultural.repositories.IDocumentTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DocumentTypeService {
     @Autowired
     IDocumentTypeRepository iDocumentTypeRepository;
-    @Autowired
-    IDocumentTypeMap iDocumentTypeMap;
+
 
     public DocumentTypeDTO addDocumentType(DocumentType documentTypeData) throws Exception {
         try {
-            return this.iDocumentTypeMap.documentTypeToDTO(this.iDocumentTypeRepository.save(documentTypeData));
+            DocumentType savedDocumentType = iDocumentTypeRepository.save(documentTypeData);
+            return convertToDTO(savedDocumentType);
         } catch (Exception error) {
             throw new Exception(error.getMessage());
         }
     }
 
-    //RUTINA PARA BUSCAR UN ELEMENTO DENTRO BD POR ID
     public DocumentTypeDTO searchDocumentTypeById(Integer id) throws Exception {
-        try{
-            if(this.iDocumentTypeRepository.findById(id).isPresent()){
-                //devuelvalo
-                return this.iDocumentTypeMap.documentTypeToDTO(this
-                        .iDocumentTypeRepository.findById(id).get());
-            }else{
-                //diga que no esta
-                throw new Exception("User no found");
-
-            }
-        } catch(Exception error){
-            throw new Exception(error.getMessage());
+        Optional<DocumentType> documentTypeOptional = iDocumentTypeRepository.findById(id);
+        if (documentTypeOptional.isPresent()) {
+            DocumentType documentType = documentTypeOptional.get();
+            return convertToDTO(documentType);
+        } else {
+            throw new Exception("User not found");
         }
     }
 
     public List<DocumentTypeDTO> searchAllTypesDocuments() throws Exception {
-        try{
-            return this.iDocumentTypeMap.toDtoList(iDocumentTypeRepository.findAll());
-
-        }catch(Exception error) {
-            throw new Exception(error.getMessage());
-        }
+        List<DocumentType> documentTypeList = iDocumentTypeRepository.findAll();
+        return convertToDTOList(documentTypeList);
     }
 
     public DocumentTypeDTO modifyDocumentType(Integer id, DocumentType documentType) throws Exception {
-        try{
-            if(this.iDocumentTypeRepository.findById(id).isPresent()){
-                //cambielo
-                DocumentType objectFound= this.iDocumentTypeRepository.findById(id).get();
-                objectFound.setType_document(documentType.getType_document());
-                return this.iDocumentTypeMap.documentTypeToDTO(iDocumentTypeRepository.save(objectFound));
-            }else {
-                //diga que no esta
-                throw new Exception("User no found");
-            }
-
-
-        }catch(Exception error){
-            throw new Exception(error.getMessage());
+        Optional<DocumentType> optionalDocumentType = iDocumentTypeRepository.findById(id);
+        if (optionalDocumentType.isPresent()) {
+            DocumentType existingDocumentType = optionalDocumentType.get();
+            existingDocumentType.setType_document(documentType.getType_document());
+            DocumentType modifiedDocumentType = iDocumentTypeRepository.save(existingDocumentType);
+            return convertToDTO(modifiedDocumentType);
+        } else {
+            throw new Exception("User not found");
         }
+    }
+
+    // Métodos para convertir de entidad a DTO
+    private DocumentTypeDTO convertToDTO(DocumentType documentType) {
+        DocumentTypeDTO dto = new DocumentTypeDTO();
+        dto.setId(documentType.getId_type_document());
+        dto.setTypeDocument(documentType.getType_document());
+        return dto;
+    }
+
+    private List<DocumentTypeDTO> convertToDTOList(List<DocumentType> documentTypeList) {
+        return documentTypeList.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
 

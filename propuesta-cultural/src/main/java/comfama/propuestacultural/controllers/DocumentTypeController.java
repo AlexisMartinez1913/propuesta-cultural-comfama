@@ -1,4 +1,4 @@
-package controllers;
+package comfama.propuestacultural.controllers;
 
 import comfama.propuestacultural.dtos.errorsDTO.DocumentTypeErrorDTO;
 import comfama.propuestacultural.models.DocumentType;
@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/v1/document")
 public class DocumentTypeController {
+
     @Autowired
     DocumentTypeService documentTypeService;
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<?> saveDocument(@RequestBody DocumentType data) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).
@@ -64,7 +65,7 @@ public class DocumentTypeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> modifyDocument (@RequestBody DocumentType data, Integer id){
+    public ResponseEntity<?> modifyDocument (@RequestBody DocumentType data, @PathVariable Integer id){
         try{
             return ResponseEntity
                     .status(HttpStatus.ACCEPTED)
@@ -79,6 +80,4 @@ public class DocumentTypeController {
                     .body(errorDTO.getErrorMessage());
         }
     }
-
-
 }
