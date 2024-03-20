@@ -66,15 +66,13 @@ public class ProponentService {
                 Proponent existingProponent = optionalProponent.get();
                 existingProponent.setName_proponent(proponentDTO.getName_proponent());
                 existingProponent.setTrajectory(proponentDTO.getTrajectory());
-
                 ProposerType proposerType = new ProposerType();
-                proposerType.setIdProposerType(proponentDTO.getType_proponent());
                 existingProponent.setProposerType(proposerType);
 
                 Proponent updatedProponent = proponentRepository.save(existingProponent);
                 return convertToDTO(updatedProponent);
             } else {
-                throw new Exception("Proponent not found");
+                throw new Exception("Proponent no found");
             }
         } catch (Exception error) {
             throw new Exception("Error to update the proponent: " + error.getMessage());
