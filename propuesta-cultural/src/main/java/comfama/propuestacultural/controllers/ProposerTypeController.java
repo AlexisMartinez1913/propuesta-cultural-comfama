@@ -1,27 +1,28 @@
 package comfama.propuestacultural.controllers;
 
-import comfama.propuestacultural.dtos.errorsDTO.DocumentTypeErrorDTO;
-import comfama.propuestacultural.models.DocumentType;
-import comfama.propuestacultural.services.DocumentTypeService;
+
+import comfama.propuestacultural.dtos.errorsDTO.ProposerTypeErrorDTO;
+import comfama.propuestacultural.models.ProposerType;
+import comfama.propuestacultural.services.ProposerTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/document")
-public class DocumentTypeController {
+@RequestMapping("api/v1/proposertype")
+public class ProposerTypeController {
 
     @Autowired
-    DocumentTypeService documentTypeService;
+    ProposerTypeService proposerTypeService;
 
     @PostMapping()
-    public ResponseEntity<?> saveDocument(@RequestBody DocumentType data) {
+    public ResponseEntity<?> saveProposerType(@RequestBody ProposerType data) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).
-                    body(this.documentTypeService.addDocumentType(data));
+                    body(this.proposerTypeService.addProposerType(data));
         } catch (Exception error) {
-            DocumentTypeErrorDTO errorDTO = new DocumentTypeErrorDTO();
+            ProposerTypeErrorDTO errorDTO = new ProposerTypeErrorDTO();
             errorDTO.setErrorMessage(error.getMessage());
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDTO.getErrorMessage());
@@ -30,14 +31,14 @@ public class DocumentTypeController {
     }
 
     @GetMapping
-    public ResponseEntity<?> searchDocuments() {
+    public ResponseEntity<?> searchProposersTypes() {
         try{
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(this.documentTypeService.searchAllTypesDocuments());
+                    .body(this.proposerTypeService.searchAllProposersTypes());
         } catch( Exception error){
 
-            DocumentTypeErrorDTO errorDTO = new DocumentTypeErrorDTO();
+            ProposerTypeErrorDTO errorDTO = new ProposerTypeErrorDTO();
             errorDTO.setErrorMessage(error.getMessage());
 
             return ResponseEntity
@@ -47,14 +48,14 @@ public class DocumentTypeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> searchDocument(@PathVariable Integer id){
+    public ResponseEntity<?> searchProposerTypeById(@PathVariable Integer id){
         try{
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(this.documentTypeService.searchDocumentTypeById(id));
+                    .body(this.proposerTypeService.searchProposerTypeById(id));
         }catch( Exception error){
 
-            DocumentTypeErrorDTO errorDTO = new DocumentTypeErrorDTO();
+            ProposerTypeErrorDTO errorDTO = new ProposerTypeErrorDTO();
             errorDTO.setErrorMessage(error.getMessage());
 
             return ResponseEntity
@@ -65,14 +66,14 @@ public class DocumentTypeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> modifyDocument (@RequestBody DocumentType data, @PathVariable Integer id) {
+    public ResponseEntity<?> modifyProposerType (@RequestBody ProposerType data, @PathVariable Integer id){
         try{
             return ResponseEntity
                     .status(HttpStatus.ACCEPTED)
-                    .body(this.documentTypeService.modifyDocumentType(id, data));
+                    .body(this.proposerTypeService.modifyProposerType(id, data));
         }catch( Exception error){
 
-            DocumentTypeErrorDTO errorDTO = new DocumentTypeErrorDTO();
+            ProposerTypeErrorDTO errorDTO = new ProposerTypeErrorDTO();
             errorDTO.setErrorMessage(error.getMessage());
 
             return ResponseEntity

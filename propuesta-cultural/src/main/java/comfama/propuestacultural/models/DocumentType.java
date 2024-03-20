@@ -3,9 +3,10 @@ package comfama.propuestacultural.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "typesDocuments")
+@Table(name = "types_documents")
 public class DocumentType {
     @Id
+    @Column(name = "id_type_document")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_type_document;
 

@@ -26,18 +26,29 @@ public class DocumentTypeService {
     }
 
     public DocumentTypeDTO searchDocumentTypeById(Integer id) throws Exception {
-        Optional<DocumentType> documentTypeOptional = iDocumentTypeRepository.findById(id);
-        if (documentTypeOptional.isPresent()) {
-            DocumentType documentType = documentTypeOptional.get();
-            return convertToDTO(documentType);
-        } else {
-            throw new Exception("User not found");
+        try {
+            Optional<DocumentType> documentTypeOptional = iDocumentTypeRepository.findById(id);
+            if (documentTypeOptional.isPresent()) {
+                DocumentType documentType = documentTypeOptional.get();
+                return convertToDTO(documentType);
+            } else {
+                throw new Exception("User not found");
+            }
+
+        } catch (Exception error) {
+            throw new Exception(error.getMessage());
         }
+
     }
 
     public List<DocumentTypeDTO> searchAllTypesDocuments() throws Exception {
-        List<DocumentType> documentTypeList = iDocumentTypeRepository.findAll();
-        return convertToDTOList(documentTypeList);
+        try {
+            List<DocumentType> documentTypeList = iDocumentTypeRepository.findAll();
+            return convertToDTOList(documentTypeList);
+        } catch (Exception error) {
+            throw new Exception(error.getMessage());
+        }
+
     }
 
     public DocumentTypeDTO modifyDocumentType(Integer id, DocumentType documentType) throws Exception {
@@ -52,7 +63,7 @@ public class DocumentTypeService {
         }
     }
 
-    // Métodos para convertir de entidad a DTO
+    // convertir de entidad a DTO
     private DocumentTypeDTO convertToDTO(DocumentType documentType) {
         DocumentTypeDTO dto = new DocumentTypeDTO();
         dto.setId(documentType.getId_type_document());
