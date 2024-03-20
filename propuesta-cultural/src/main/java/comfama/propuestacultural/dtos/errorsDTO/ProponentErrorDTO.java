@@ -1,9 +1,9 @@
 package comfama.propuestacultural.dtos.errorsDTO;
 
-public class AttachedDocumentErrorDTO {
+public class ProponentErrorDTO {
     private String errorMessage;
 
-    public AttachedDocumentErrorDTO() {
+    public ProponentErrorDTO() {
     }
 
     public String getErrorMessage() {
