@@ -73,4 +73,6 @@ public class ProposalDTO {
     public void setProponent_id(UUID proponent_id) {
         this.proponent_id = proponent_id;
     }
+
+
 }

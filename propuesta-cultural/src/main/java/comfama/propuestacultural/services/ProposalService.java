@@ -1,24 +1,21 @@
 package comfama.propuestacultural.services;
 
-import comfama.propuestacultural.dtos.ProponentDTO;
 import comfama.propuestacultural.dtos.ProposalDTO;
 import comfama.propuestacultural.helpers.State;
 import comfama.propuestacultural.models.Proponent;
 import comfama.propuestacultural.models.Proposal;
-import comfama.propuestacultural.models.ProposerType;
-import comfama.propuestacultural.repositories.ProposalRepository;
+import comfama.propuestacultural.repositories.IProposalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class ProposalService {
     @Autowired
-    ProposalRepository proposalRepository;
+    IProposalRepository IProposalRepository;
 
     public ProposalDTO addProposal(ProposalDTO proposalDTO) throws Exception {
         try {
@@ -35,7 +32,7 @@ public class ProposalService {
             Proponent proponent = new Proponent();
             proponent.setId_proponent(proposalDTO.getProponent_id());
 
-            Proposal savedProposal = proposalRepository.save(proposal);
+            Proposal savedProposal = IProposalRepository.save(proposal);
             return convertToDTO(savedProposal);
         } catch (Exception error) {
             throw new Exception("Error to save the proposal: " + error.getMessage());
@@ -44,7 +41,7 @@ public class ProposalService {
 
     public List<ProposalDTO> getAllProposals() throws Exception {
         try {
-            List<Proposal> proposals = proposalRepository.findAll();
+            List<Proposal> proposals = IProposalRepository.findAll();
             return convertToDTOList(proposals);
         } catch (Exception error) {
             throw new Exception("Error to get the proposals: " + error.getMessage());
@@ -53,7 +50,7 @@ public class ProposalService {
 
     public ProposalDTO searchProposaltById(Integer id) throws Exception {
         try {
-            Optional<Proposal> proposalOptional = proposalRepository.findById(id);
+            Optional<Proposal> proposalOptional = IProposalRepository.findById(id);
             if (proposalOptional.isPresent()) {
                 Proposal proposal = proposalOptional.get();
                 return convertToDTO(proposal);
@@ -67,7 +64,7 @@ public class ProposalService {
 
     public ProposalDTO updateProposal(Integer id, ProposalDTO proposalDTO) throws Exception {
         try {
-            Optional<Proposal> optionalProposal = proposalRepository.findById(id);
+            Optional<Proposal> optionalProposal = IProposalRepository.findById(id);
             if (optionalProposal.isPresent()) {
                 Proposal existingProposal = optionalProposal.get();
                 existingProposal.setName_proposal(proposalDTO.getName_proposal());
@@ -80,7 +77,7 @@ public class ProposalService {
                 proponent.setId_proponent(proposalDTO.getProponent_id());
                 existingProposal.setProponent(proponent);
 
-                Proposal updatedProposal = proposalRepository.save(existingProposal);
+                Proposal updatedProposal = IProposalRepository.save(existingProposal);
                 return convertToDTO(updatedProposal);
             } else {
                 throw new Exception("Proponent not found");

@@ -1,11 +1,9 @@
 package comfama.propuestacultural.services;
 
 import comfama.propuestacultural.dtos.ProponentDTO;
-import comfama.propuestacultural.dtos.RepresentativeDTO;
 import comfama.propuestacultural.models.Proponent;
 import comfama.propuestacultural.models.ProposerType;
-import comfama.propuestacultural.models.Representative;
-import comfama.propuestacultural.repositories.ProponentRepository;
+import comfama.propuestacultural.repositories.IProponentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class ProponentService {
     @Autowired
-    ProponentRepository proponentRepository;
+    IProponentRepository IProponentRepository;
 
     public ProponentDTO addProponent(ProponentDTO proponentDTO) throws Exception {
         try {
@@ -29,7 +27,7 @@ public class ProponentService {
             proposerType.setIdProposerType(proponentDTO.getType_proponent());
             proponent.setProposerType(proposerType);
 
-            Proponent savedProponent = proponentRepository.save(proponent);
+            Proponent savedProponent = IProponentRepository.save(proponent);
             return convertToDTO(savedProponent);
         } catch (Exception error) {
             throw new Exception("Error to save the proponent: " + error.getMessage());
@@ -38,7 +36,7 @@ public class ProponentService {
 
     public List<ProponentDTO> getAllProponents() throws Exception {
         try {
-            List<Proponent> proponents = proponentRepository.findAll();
+            List<Proponent> proponents = IProponentRepository.findAll();
             return convertToDTOList(proponents);
         } catch (Exception error) {
             throw new Exception("Error to get the proponents: " + error.getMessage());
@@ -47,7 +45,7 @@ public class ProponentService {
 
     public ProponentDTO searchProponentById(UUID id) throws Exception {
         try {
-            Optional<Proponent> proponentOptional = proponentRepository.findById(id);
+            Optional<Proponent> proponentOptional = IProponentRepository.findById(id);
             if (proponentOptional.isPresent()) {
                 Proponent proponent = proponentOptional.get();
                 return convertToDTO(proponent);
@@ -61,7 +59,7 @@ public class ProponentService {
 
     public ProponentDTO updateProponent(UUID id, ProponentDTO proponentDTO) throws Exception {
         try {
-            Optional<Proponent> optionalProponent = proponentRepository.findById(id);
+            Optional<Proponent> optionalProponent = IProponentRepository.findById(id);
             if (optionalProponent.isPresent()) {
                 Proponent existingProponent = optionalProponent.get();
                 existingProponent.setName_proponent(proponentDTO.getName_proponent());
@@ -69,7 +67,7 @@ public class ProponentService {
                 ProposerType proposerType = new ProposerType();
                 existingProponent.setProposerType(proposerType);
 
-                Proponent updatedProponent = proponentRepository.save(existingProponent);
+                Proponent updatedProponent = IProponentRepository.save(existingProponent);
                 return convertToDTO(updatedProponent);
             } else {
                 throw new Exception("Proponent no found");

@@ -1,10 +1,8 @@
 package comfama.propuestacultural.services;
 
 import comfama.propuestacultural.dtos.AttachedDocumentDTO;
-import comfama.propuestacultural.dtos.DocumentTypeDTO;
 import comfama.propuestacultural.models.AttachedDocument;
-import comfama.propuestacultural.models.DocumentType;
-import comfama.propuestacultural.repositories.AttachedDocumentRepository;
+import comfama.propuestacultural.repositories.IAttachedDocumentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public class AttachedDocumentService {
     @Autowired
-    AttachedDocumentRepository attachedDocumentRepository;
+    IAttachedDocumentRepository IAttachedDocumentRepository;
 
     public AttachedDocumentDTO addAttachedDocument(AttachedDocumentDTO attachedDocumentDTO) throws Exception {
         try {
@@ -23,7 +21,7 @@ public class AttachedDocumentService {
             attachedDocument.setName_document(attachedDocumentDTO.getName_document());
             attachedDocument.setUrl(attachedDocumentDTO.getUrl());
 
-            AttachedDocument savedAttachedDocument = attachedDocumentRepository.save(attachedDocument);
+            AttachedDocument savedAttachedDocument = IAttachedDocumentRepository.save(attachedDocument);
             return convertToDTO(savedAttachedDocument);
         } catch (Exception error) {
             throw new Exception("Error al guardar el documento adjunto: " + error.getMessage());
@@ -32,7 +30,7 @@ public class AttachedDocumentService {
 
     public List<AttachedDocumentDTO> getAllAttachedDocuments() throws Exception {
         try {
-            List<AttachedDocument> attachedDocuments = attachedDocumentRepository.findAll();
+            List<AttachedDocument> attachedDocuments = IAttachedDocumentRepository.findAll();
             return convertToDTOList(attachedDocuments);
         } catch (Exception error) {
             throw new Exception("Error to get attached documents: " + error.getMessage());
@@ -41,7 +39,7 @@ public class AttachedDocumentService {
 
     public AttachedDocumentDTO searchAttachedDocumentById(Integer id) throws Exception {
         try {
-            Optional<AttachedDocument> attachedDocumentOptional = attachedDocumentRepository.findById(id);
+            Optional<AttachedDocument> attachedDocumentOptional = IAttachedDocumentRepository.findById(id);
             if (attachedDocumentOptional.isPresent()) {
                 AttachedDocument attachedDocument1 = attachedDocumentOptional.get();
                 return convertToDTO(attachedDocument1);
@@ -57,11 +55,11 @@ public class AttachedDocumentService {
 
     public AttachedDocumentDTO modifyAttachedDocument(Integer id, AttachedDocument attachedDocument) throws Exception {
         try {
-            Optional<AttachedDocument> optionalAttachedDocument = attachedDocumentRepository.findById(id);
+            Optional<AttachedDocument> optionalAttachedDocument = IAttachedDocumentRepository.findById(id);
             if (optionalAttachedDocument.isPresent()) {
                 AttachedDocument existingAttachedDocument = optionalAttachedDocument.get();
                 existingAttachedDocument.setName_document(attachedDocument.getName_document());
-                AttachedDocument modifiedAttachedDocument = attachedDocumentRepository.save(existingAttachedDocument);
+                AttachedDocument modifiedAttachedDocument = IAttachedDocumentRepository.save(existingAttachedDocument);
                 return convertToDTO(modifiedAttachedDocument);
             } else {
                 throw new Exception("Attached Document not found");
