@@ -59,7 +59,7 @@ public class DocumentTypeService {
             DocumentType modifiedDocumentType = iDocumentTypeRepository.save(existingDocumentType);
             return convertToDTO(modifiedDocumentType);
         } else {
-            throw new Exception("User not found");
+            throw new Exception("document not found");
         }
     }
 
